@@ -1,7 +1,7 @@
 {
   "name": "typechain",
   "version": "1.0.0",
-  "description": "Learning Typescript by making a Blockchain with it",
+  "description": "블록체인과 함께 배우는 typescript 실습",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

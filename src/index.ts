@@ -5,7 +5,7 @@ interface Human {
 }
 
 const person = {
-  name: "park",
+  name: "Park",
   age: 26,
   gender: "male"
 };
