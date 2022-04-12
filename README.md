@@ -11,6 +11,8 @@
 1. [Setting Typescript Up](#Setting-Typescript-Up)
 1. [First steps with Typescript](#First-steps-with-Typescript)
 1. [Types in Typescript](#Types-in-Typescript)
+1. [Interfaces on Typescript](#Interfaces-on-Typescript)
+1. [Classes on Typescript part One](#Classes-on-Typescript-part-One)
 
 
 
@@ -214,3 +216,37 @@ console.log(sayHi(person));
 ```
 
 이와 같이 `Interface`를 만들어서 내 `Object`가 함수에서 사용될 수 있도록 만들 수 있다.
+
+
+
+## Classes on Typescript
+
+Typescript의 클래스에 대해서 알아보자
+
+```tsx
+// index.ts
+
+class Human {
+  public name: string;
+  public age: number;
+  public gender: string;
+  constructor(name:string, age:number, gender:string) {
+    this.name = name;
+    this.age = age;
+    this.gender = gender;
+  }
+}
+
+const lynn = new Human("Lynn", 18, "female")
+
+const sayHi = (person: Human): string => {
+  return `Hello ${person.name}, you are ${person.age}, you are a ${person.gender}!`;
+};
+
+console.log(sayHi(lynn));
+```
+
+일반적인 Javascript에서와 달리 `public` 선언으로 class의 속성을 선언해 준다. 만약 `private` 속성을 준다면 외부에서 사용하지 않게 보호할 수 있다.
+
+
+
