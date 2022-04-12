@@ -13,6 +13,7 @@
 1. [Types in Typescript](#Types-in-Typescript)
 1. [Interfaces on Typescript](#Interfaces-on-Typescript)
 1. [Classes on Typescript part One](#Classes-on-Typescript-part-One)
+1. [Blockchain Creating a Block](#Blockchain-Creating-a-Block)
 
 
 
@@ -250,3 +251,41 @@ console.log(sayHi(lynn));
 
 
 
+### Blockchain Creating a Block
+
+이제 블록체인을 실제로 만들어 보자!!
+
+```tsx
+// index.ts
+
+class Block {
+  public index: number;
+  public hash: string;
+  public previousHash: string;
+  public data: string;
+  public timestamp: number;
+  constructor(
+    index: number,
+    hash: string,
+    previousHash: string,
+    data: string,
+    timestamp: number
+  ) {
+    this.index = index;
+    this.hash = hash;
+    this.previousHash = previousHash;
+    this.data = data;
+    this.timestamp = timestamp;
+  }
+}
+
+const genesisBlock: Block = new Block(0, "12321312312", "", "Hello", 123456);
+
+let blockchain: [Block] = [genesisBlock];
+
+console.log(blockchain)
+```
+
+기본적인 블록체인의 구조이다. 각각의 속성을 선언해 주고 초기 블록인 `genesisBlock`과 블록들의 배열인 `blockchain`을 생성하였다.
+
+![image-20220412191321555](README.assets/image-20220412191321555.png)
