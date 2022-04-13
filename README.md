@@ -13,7 +13,8 @@
 1. [Types in Typescript](#Types-in-Typescript)
 1. [Interfaces on Typescript](#Interfaces-on-Typescript)
 1. [Classes on Typescript part One](#Classes-on-Typescript-part-One)
-1. [Blockchain Creating a Block](#Blockchain-Creating-a-Block)
+1. [Creating-a-Block-part-One](#Creating-a-Block-part-One)
+1. [Creating a Block part Two](#Creating-a-Block-part-Two)
 
 
 
@@ -251,7 +252,7 @@ console.log(sayHi(lynn));
 
 
 
-### Blockchain Creating a Block
+### Creating a Block part One
 
 이제 블록체인을 실제로 만들어 보자!!
 
@@ -281,11 +282,62 @@ class Block {
 
 const genesisBlock: Block = new Block(0, "12321312312", "", "Hello", 123456);
 
-let blockchain: [Block] = [genesisBlock];
+let blockchain: Block[] = [genesisBlock];
 
-console.log(blockchain)
+console.log(blockchain);
 ```
 
 기본적인 블록체인의 구조이다. 각각의 속성을 선언해 주고 초기 블록인 `genesisBlock`과 블록들의 배열인 `blockchain`을 생성하였다.
 
 ![image-20220412191321555](README.assets/image-20220412191321555.png)
+
+
+
+## Creating a Block part Two
+
+먼저 `crypto-js`를 설치하자.
+
+```bash
+$ npm i crypto-js
+```
+
+그리고 Block 객체를 선언하지 않아도 사용할수 있는 class method를 만들기 위해 `static` method를 만들어 주자. 그리고 이 외에 사용할만한 함수를 만들어 주자.
+
+```tsx
+// index.ts
+
+import * as CryptoJS from "crypto-js";
+
+class Block {
+	
+    ...
+
+  static calculateBlockHash = (
+    index: number,
+    previousHash: string,
+    timestamp: number,
+    data: string
+  ): string => CryptoJS.SHA256(index + previousHash + timestamp + data).toString();
+
+  constructor(
+	
+      ...
+      
+  ) {
+      
+      ...
+      
+  }
+}
+
+const genesisBlock: Block = new Block(0, "12321312312", "", "Hello", 123456);
+
+let blockchain: Block[] = [genesisBlock];
+
+const getBlockchain = (): Block[] => blockchain;
+
+const getLatestBlock = (): Block => blockchain[blockchain.length - 1];
+
+const getNewTimeStamp = (): number => Math.round(new Date().getTime() / 1000);
+```
+
