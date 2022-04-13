@@ -15,6 +15,7 @@
 1. [Classes on Typescript part One](#Classes-on-Typescript-part-One)
 1. [Creating-a-Block-part-One](#Creating-a-Block-part-One)
 1. [Creating a Block part Two](#Creating-a-Block-part-Two)
+1. [Creating a Block part Three](#Creating-a-Block-part-Three)
 
 
 
@@ -341,3 +342,40 @@ const getLatestBlock = (): Block => blockchain[blockchain.length - 1];
 const getNewTimeStamp = (): number => Math.round(new Date().getTime() / 1000);
 ```
 
+
+
+## Creating a Block part Three
+
+이제 이렇게 만든 함수들로 블록체인을 생성해 보자
+
+```tsx
+// index.ts
+
+...
+
+const createNewBlock = (data: string) : Block => {
+  const previousBlock: Block = getLatestBlock();
+  const newIndex: number = previousBlock.index + 1;
+  const newTimestamp: number = getNewTimeStamp();
+  const newHash: string = Block.calculateBlockHash(
+    newIndex,
+    previousBlock.hash,
+    newTimestamp,
+    data
+  );
+  const newBlock: Block = new Block(
+    newIndex,
+    newHash,
+    previousBlock.hash,
+    data,
+    newTimestamp
+  );
+  return newBlock;
+};
+
+console.log(createNewBlock("hello"), createNewBlock("bye bye"));
+```
+
+![image-20220413195227432](README.assets/image-20220413195227432.png)
+
+잘 생성됨을 볼 수 있다.
