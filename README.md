@@ -17,6 +17,7 @@
 1. [Creating a Block part Two](#Creating-a-Block-part-Two)
 1. [Creating a Block part Three](#Creating-a-Block-part-Three)
 1. [Validating Block Structure](#Validating-Block-Structure)
+1. [Conclusions](#Conclusions)
 
 
 
@@ -394,7 +395,7 @@ const getHashforBlock = (aBlock: Block): string =>
 
 ```tsx
 const isBlockValid = (candidateBlock: Block, previousBlock: Block): boolean => {
-  if(Block.validateStructure(candidateBlock)) {
+  if(!Block.validateStructure(candidateBlock)) {
     return false;
   } else if(previousBlock.index + 1 !== candidateBlock.index) {
     return false;
@@ -420,5 +421,43 @@ const addBlock = (candidateBlock: Block): void => {
 
 
 
+## Conclusions
 
+이제 새로운 Block을 만들면 Blockchain에 추가해 주도록 `createNewBlock` 함수를 수정해주자.
 
+```tsx
+const createNewBlock = (data: string) : Block => {
+  const previousBlock: Block = getLatestBlock();
+  const newIndex: number = previousBlock.index + 1;
+  const newTimestamp: number = getNewTimeStamp();
+  const newHash: string = Block.calculateBlockHash(
+    newIndex,
+    previousBlock.hash,
+    newTimestamp,
+    data
+  );
+  const newBlock: Block = new Block(
+    newIndex,
+    newHash,
+    previousBlock.hash,
+    data,
+    newTimestamp
+  );
+  addBlock(newBlock);
+  return newBlock;
+};
+```
+
+이제 Blockchain을 생성해 보자.
+
+```tsx
+createNewBlock("second block");
+createNewBlock("third block");
+createNewBlock("forth block");
+
+console.log(blockchain);
+```
+
+![image-20220416174118369](README.assets/image-20220416174118369.png)
+
+성공적으로 생성되었다!
