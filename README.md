@@ -16,6 +16,7 @@
 1. [Creating-a-Block-part-One](#Creating-a-Block-part-One)
 1. [Creating a Block part Two](#Creating-a-Block-part-Two)
 1. [Creating a Block part Three](#Creating-a-Block-part-Three)
+1. [Validating Block Structure](#Validating-Block-Structure)
 
 
 
@@ -66,8 +67,6 @@ package.json에 script에 명령어를 추가해 주자.
 이제 index.ts 파일을 생성하여 처음으로 시험해 보자.
 
 ```tsx
-// index.ts
-
 console.log("hello")
 ```
 
@@ -86,8 +85,6 @@ $ npm start
 먼저 일반적인 Javascript 코드를 보자
 
 ```tsx
-// index.ts
-
 const sayHi = (name, age, gender) => {
   console.log(`Hello ${name}, you are ${age}, you are a ${gender}`);
 }
@@ -112,8 +109,6 @@ Hello Park, you are 26, you are a undefined
 와 같은 결과를 보여줄 것이다. Typescript는 코드를 실행하기 전 발생할 오류를 미리 알려주는 강력한 기능을 가지고 있다.
 
 ```tsx
-// index.ts
-
 const sayHi = (name, age, gender?) => {
   console.log(`Hello ${name}, you are ${age}, you are a ${gender}`);
 }
@@ -132,8 +127,6 @@ sayHi("Park", 26);
 이제 Typescript의 `Type`을 명시해 주자.
 
 ```tsx
-// index.ts
-
 const sayHi = (name:string, age:number, gender:string): string => {
   return `Hello ${name}, you are ${age}, you are a ${gender}`;
 }
@@ -197,8 +190,6 @@ $ npm i tsc-watch --save-dev
 `Interface`를 사용하여 함수에  객체를 전달해 보자.
 
 ```tsx
-// index.ts
-
 interface Human {
   name:string;
   age:number;
@@ -227,8 +218,6 @@ console.log(sayHi(person));
 Typescript의 클래스에 대해서 알아보자
 
 ```tsx
-// index.ts
-
 class Human {
   public name: string;
   public age: number;
@@ -258,8 +247,6 @@ console.log(sayHi(lynn));
 이제 블록체인을 실제로 만들어 보자!!
 
 ```tsx
-// index.ts
-
 class Block {
   public index: number;
   public hash: string;
@@ -305,8 +292,6 @@ $ npm i crypto-js
 그리고 Block 객체를 선언하지 않아도 사용할수 있는 class method를 만들기 위해 `static` method를 만들어 주자. 그리고 이 외에 사용할만한 함수를 만들어 주자.
 
 ```tsx
-// index.ts
-
 import * as CryptoJS from "crypto-js";
 
 class Block {
@@ -349,8 +334,6 @@ const getNewTimeStamp = (): number => Math.round(new Date().getTime() / 1000);
 이제 이렇게 만든 함수들로 블록체인을 생성해 보자
 
 ```tsx
-// index.ts
-
 ...
 
 const createNewBlock = (data: string) : Block => {
@@ -379,3 +362,63 @@ console.log(createNewBlock("hello"), createNewBlock("bye bye"));
 ![image-20220413195227432](README.assets/image-20220413195227432.png)
 
 잘 생성됨을 볼 수 있다.
+
+
+
+## Validating Block Structure
+
+먼저 Blcok 구조의 유효성을 검사하는  static 함수를 만들어 주자.
+
+```tsx
+  static validateStructure = (aBlock: Block): boolean => 
+    typeof aBlock.index === "number" && 
+    typeof aBlock.hash === "string" && 
+    typeof aBlock.previousHash === "string" &&
+    typeof aBlock.timestamp === "number" &&
+    typeof aBlock.data === "string";
+```
+
+이 모든 조건을 만족하면 `true`를 반환할 것이다. 그리고 블록의 Hash를 계산하는 함수를 만들자.
+
+```tsx
+const getHashforBlock = (aBlock: Block): string => 
+  Block.calculateBlockHash(
+    aBlock.index,
+    aBlock.previousHash,
+    aBlock.timestamp,
+    aBlock.data
+  );
+```
+
+그리고 유효성을 검사하는 함수를 만들자.
+
+```tsx
+const isBlockValid = (candidateBlock: Block, previousBlock: Block): boolean => {
+  if(Block.validateStructure(candidateBlock)) {
+    return false;
+  } else if(previousBlock.index + 1 !== candidateBlock.index) {
+    return false;
+  } else if(previousBlock.hash !== candidateBlock.previousHash) {
+    return false;
+  } else if(getHashforBlock(candidateBlock)) {
+    return false;
+  } else {
+    return true;
+  }
+};
+```
+
+유효성 검사를 통과하면 Blockchain에 Block을 추가하는 함수를 만들자.
+
+```tsx
+const addBlock = (candidateBlock: Block): void => {
+  if(isBlockValid(candidateBlock, getLatestBlock())) {
+    blockchain.push(candidateBlock);
+  }
+};
+```
+
+
+
+
+
